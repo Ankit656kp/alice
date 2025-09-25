@@ -6,7 +6,6 @@ from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 
 import config
-
 from ..logging import LOGGER
 
 
@@ -38,12 +37,13 @@ def git():
     else:
         UPSTREAM_REPO = config.UPSTREAM_REPO
     try:
-        repo = Repo()
-        LOGGER(__name__).info(f"Git Client Found [VPS DEPLOYER]")
+        repo = Repo(".")
+        LOGGER.info("Git Client Found [VPS DEPLOYER]")
     except GitCommandError:
-        LOGGER(__name__).info(f"Invalid Git Command")
+        LOGGER.info("Invalid Git Command")
+        return
     except InvalidGitRepositoryError:
-        repo = Repo.init()
+        repo = Repo.init(".")
         if "origin" in repo.remotes:
             origin = repo.remote("origin")
         else:
@@ -57,15 +57,14 @@ def git():
             origin.refs[config.UPSTREAM_BRANCH]
         )
         repo.heads[config.UPSTREAM_BRANCH].checkout(True)
-        try:
-            repo.create_remote("origin", config.UPSTREAM_REPO)
-        except BaseException:
-            pass
-        nrs = repo.remote("origin")
-        nrs.fetch(config.UPSTREAM_BRANCH)
-        try:
-            nrs.pull(config.UPSTREAM_BRANCH)
-        except GitCommandError:
-            repo.git.reset("--hard", "FETCH_HEAD")
-        install_req("pip3 install --no-cache-dir -r requirements.txt")
-        LOGGER(__name__).info(f"Fetching updates from upstream repository...")
+
+    # Fetch & Pull latest updates
+    nrs = repo.remote("origin")
+    nrs.fetch(config.UPSTREAM_BRANCH)
+    try:
+        nrs.pull(config.UPSTREAM_BRANCH)
+    except GitCommandError:
+        repo.git.reset("--hard", "FETCH_HEAD")
+
+    install_req("pip3 install --no-cache-dir -r requirements.txt")
+    LOGGER.info("Fetching updates from upstream repository...")
