@@ -1,0 +1,36 @@
+{
+  "name": "Music Bot",
+  "description": "A simple Telegram Music Bot powered by Pyrogram and PyTgCalls.",
+  "repository": "https://github.com/Ankit656kp/alice",
+  "env": {
+    "API_ID": {
+      "description": "Get this value from my.telegram.org/apps",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Get this value from my.telegram.org/apps",
+      "required": true
+    },
+    "BOT_TOKEN": {
+      "description": "Get this token from @BotFather",
+      "required": true
+    },
+    "MONGO_DB_URI": {
+      "description": "Your MongoDB URI from cloud.mongodb.com",
+      "required": true
+    },
+    "LOG_GROUP_ID": {
+      "description": "Chat ID of a group for logging bot's activities",
+      "required": true
+    },
+    "OWNER_ID": {
+      "description": "Your Telegram user ID (get it from @ultron2_robot /id)",
+      "required": true
+    },
+    "STRING_SESSION": {
+      "description": "Pyrogram v2 string session (from Replit or locally)",
+      "required": true
+    }
+  },
+  ]
+}
